@@ -30,21 +30,21 @@ class TOGoS_GitIgnore_Ruleset
 		return $lastResult;
 	}
 
+	public static function loadFromStrings($lines) {
+		$rs = new self;
+		foreach( $lines as $line ) $rs->addRule($line);
+		return $rs;
+	}
+	
 	public static function loadFromString($str) {
 		$lines = explode("\n", $str);
-		$rs = new self;
-		foreach( $lines as $line ) {
-			$rs->addRule($line);
-		}
-		return $rs;
+		return self::loadFromStrings($lines);
 	}
 	
 	public static function loadFromFile($filename) {
 		$rs = new self;
 		$fh = fopen($filename);
-		while( ($line = fgets($fh)) ) {
-			$rs->addRule($line);
-		}
+		while( ($line = fgets($fh)) ) $rs->addRule($line);
 		fclose($fh);
 		return $rs;
 	}
