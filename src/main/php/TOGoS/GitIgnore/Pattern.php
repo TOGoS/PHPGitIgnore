@@ -33,6 +33,9 @@ class TOGoS_GitIgnore_Pattern
 
 	public static function parse($pattern) {
 		$r = self::patternToRegex($pattern);
+		if( strlen($pattern) == 0 ) {
+			throw new Exception("Zero-length pattern string passed to ".__METHOD__);
+		}
 		if( $pattern[0] == '/' ) {
 			$r = '#^'.substr($r,1).'(?:$|/)#';
 		} else {
@@ -42,7 +45,7 @@ class TOGoS_GitIgnore_Pattern
 	}
 
 	public function match($path) {
-		if( $path[0] == '/' ) {
+		if( strlen($path) > 0 and $path[0] == '/' ) {
 			throw new Exception("Paths passed to #match should not start with a slash; given: «".$path."»");
 		}
 		if( !is_string($path) ) {
