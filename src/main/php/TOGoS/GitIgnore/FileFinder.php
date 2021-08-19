@@ -27,7 +27,15 @@ class TOGoS_GitIgnore_FileFinder
 			call_user_func($this->callback, $f, $result);
 		}
 		if( is_dir($fullPath) ) {
-			$dh = opendir($fullPath);
+			try {
+				$dh = opendir($fullPath);
+			}
+			catch (Exception $e) {
+				echo 'Exception received : ',  $e->getMessage(), "\n";
+				echo "==> sleep 1 seconde\n";
+				sleep(1);
+				$dh = opendir($fullPath);
+			}
 			while( ($fn = readdir($dh)) !== false ) {
 				if( $fn == '.' or $fn == '..' ) continue;
 				$this->_findFiles($rootDir, $f == '' ? $fn : $f.'/'.$fn);
